@@ -7,6 +7,7 @@ import EnhancedSidebar from './EnhancedSidebar'
 import MultiViewport from './MultiViewport'
 import LayoutManager from './LayoutManager'
 import SeriesSelector from './SeriesSelector'
+import ReportGenerator from './ReportGenerator'
 import { useImageManipulation } from '../hooks/useImageManipulation'
 import { Instance, StudyInfo, CurrentImage, Series } from '../types/dicom'
 
@@ -67,35 +68,35 @@ const DicomViewer: React.FC<DicomViewerProps> = ({ studyId }) => {
       isCombinedView: false
     },
           'viewport-2': {
-        id: 'viewport-2',
-        currentImage: null,
-        isLoading: false,
-        zoom: 1,
-        rotation: 0,
-        windowCenter: 128,
-        windowWidth: 256,
-        panX: 0,
-        panY: 0,
-        currentInstanceIndex: 0,
-        currentSeriesId: null,
-        combinedSeries: [],
-        isCombinedView: false
-      },
+            id: 'viewport-2',
+            currentImage: null,
+            isLoading: false,
+            zoom: 1,
+            rotation: 0,
+            windowCenter: 128,
+            windowWidth: 256,
+            panX: 0,
+            panY: 0,
+            currentInstanceIndex: 0,
+            currentSeriesId: null,
+            combinedSeries: [],
+            isCombinedView: false
+          },
           'viewport-3': {
-        id: 'viewport-3',
-        currentImage: null,
-        isLoading: false,
-        zoom: 1,
-        rotation: 0,
-        windowCenter: 128,
-        windowWidth: 256,
-        panX: 0,
-        panY: 0,
-        currentInstanceIndex: 0,
-        currentSeriesId: null,
-        combinedSeries: [],
-        isCombinedView: false
-      },
+            id: 'viewport-3',
+            currentImage: null,
+            isLoading: false,
+            zoom: 1,
+            rotation: 0,
+            windowCenter: 128,
+            windowWidth: 256,
+            panX: 0,
+            panY: 0,
+            currentInstanceIndex: 0,
+            currentSeriesId: null,
+            combinedSeries: [],
+            isCombinedView: false
+          },
     'viewport-4': {
       id: 'viewport-4',
       currentImage: null,
@@ -122,7 +123,9 @@ const DicomViewer: React.FC<DicomViewerProps> = ({ studyId }) => {
       panX: 0,
       panY: 0,
       currentInstanceIndex: 0,
-      currentSeriesId: null
+      currentSeriesId: null,
+      combinedSeries: [],
+      isCombinedView: false
     },
     'viewport-6': {
       id: 'viewport-6',
@@ -135,7 +138,9 @@ const DicomViewer: React.FC<DicomViewerProps> = ({ studyId }) => {
       panX: 0,
       panY: 0,
       currentInstanceIndex: 0,
-      currentSeriesId: null
+      currentSeriesId: null,
+      combinedSeries: [],
+      isCombinedView: false
     },
     'viewport-7': {
       id: 'viewport-7',
@@ -148,7 +153,9 @@ const DicomViewer: React.FC<DicomViewerProps> = ({ studyId }) => {
       panX: 0,
       panY: 0,
       currentInstanceIndex: 0,
-      currentSeriesId: null
+      currentSeriesId: null,
+      combinedSeries: [],
+      isCombinedView: false
     },
     'viewport-8': {
       id: 'viewport-8',
@@ -161,7 +168,9 @@ const DicomViewer: React.FC<DicomViewerProps> = ({ studyId }) => {
       panX: 0,
       panY: 0,
       currentInstanceIndex: 0,
-      currentSeriesId: null
+      currentSeriesId: null,
+      combinedSeries: [],
+      isCombinedView: false
     },
     'viewport-9': {
       id: 'viewport-9',
@@ -174,7 +183,9 @@ const DicomViewer: React.FC<DicomViewerProps> = ({ studyId }) => {
       panX: 0,
       panY: 0,
       currentInstanceIndex: 0,
-      currentSeriesId: null
+      currentSeriesId: null,
+      combinedSeries: [],
+      isCombinedView: false
     }
   })
   
@@ -186,6 +197,9 @@ const DicomViewer: React.FC<DicomViewerProps> = ({ studyId }) => {
   
   // Layout management state
   const [currentLayout, setCurrentLayout] = useState<'1x1' | '1x2' | '2x2' | '2x3' | '3x3' | 'custom'>('1x1')
+
+  // Report generation state
+  const [showReportGenerator, setShowReportGenerator] = useState(false)
 
   // Viewport management functions
   const updateViewport = (viewportId: string, updates: Partial<typeof viewports[string]>) => {
@@ -972,6 +986,10 @@ const DicomViewer: React.FC<DicomViewerProps> = ({ studyId }) => {
     }
   }
 
+  const handleGenerateReport = () => {
+    setShowReportGenerator(true)
+  }
+
   const resetView = () => {
     console.log('Reset view requested')
     const activeViewportId = getActiveViewportId()
@@ -1465,6 +1483,7 @@ const DicomViewer: React.FC<DicomViewerProps> = ({ studyId }) => {
                     setDrawingPoints={imageManipulation.setDrawingPoints}
                     downloadStudy={downloadStudy}
                     onSeriesSelect={handleSeriesSelect}
+                    onGenerateReport={handleGenerateReport}
                     // Combined series viewport functions
                     createCombinedSeriesViewport={createCombinedSeriesViewport}
                     enableCombinedSeriesView={enableCombinedSeriesView}
@@ -1542,6 +1561,18 @@ const DicomViewer: React.FC<DicomViewerProps> = ({ studyId }) => {
               </div>
             </div>
           </>
+        )}
+
+        {/* Report Generator Modal */}
+        {showReportGenerator && (
+          <ReportGenerator
+            studyInfo={studyInfo}
+            series={series}
+            instances={instances}
+            measurements={imageManipulation.measurements}
+            annotations={imageManipulation.annotations}
+            onClose={() => setShowReportGenerator(false)}
+          />
         )}
       </div>
     </div>

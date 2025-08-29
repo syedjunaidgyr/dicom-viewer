@@ -17,7 +17,8 @@ import {
   Trash2,
   Edit3,
   Copy,
-  Save
+  Save,
+  FileSpreadsheet
 } from 'lucide-react'
 import { Instance, StudyInfo, Measurement, Annotation, Series } from '../types/dicom'
 
@@ -42,9 +43,27 @@ interface EnhancedSidebarProps {
   setDrawingPoints: (points: { x: number; y: number }[]) => void
   downloadStudy: () => void
   onSeriesSelect?: (seriesId: string) => void
+  onGenerateReport?: () => void
+  // Combined series viewport functions
+  createCombinedSeriesViewport?: (viewportId: string, seriesIds: string[]) => void
+  enableCombinedSeriesView?: (viewportId: string, enabled: boolean) => void
+  addSeriesToCombinedView?: (viewportId: string, seriesId: string) => void
+  removeSeriesFromCombinedView?: (viewportId: string, seriesId: string) => void
+  updateSeriesOpacity?: (viewportId: string, seriesId: string, opacity: number) => void
+  toggleSeriesVisibility?: (viewportId: string, seriesId: string, visible: boolean) => void
+  navigateCombinedSeriesInstance?: (viewportId: string, direction: 'next' | 'previous') => void
+  viewports?: any
+  // OHIF viewer functions
+  generateOHIFViewerUrl?: (seriesId: string) => string
+  generateOHIFStudyUrl?: (studyId: string) => string
+  openInOHIFViewer?: (seriesId: string) => void
+  openStudyInOHIFViewer?: (studyId: string) => void
+  copyOHIFViewerUrl?: (seriesId: string) => void
+  copyOHIFStudyUrl?: (studyId: string) => void
+  generateMultiSeriesOHIFUrl?: (seriesIds: string[]) => string
 }
 
-type PanelType = 'study' | 'measurements' | 'annotations' | 'series' | 'tools'
+type PanelType = 'study' | 'measurements' | 'annotations' | 'series' | 'tools' | 'reports'
 
 const EnhancedSidebar: React.FC<EnhancedSidebarProps> = ({
   studyInfo,
@@ -66,7 +85,25 @@ const EnhancedSidebar: React.FC<EnhancedSidebarProps> = ({
   deleteAnnotation,
   setDrawingPoints,
   downloadStudy,
-  onSeriesSelect
+  onSeriesSelect,
+  onGenerateReport,
+  // Combined series viewport functions
+  createCombinedSeriesViewport,
+  enableCombinedSeriesView,
+  addSeriesToCombinedView,
+  removeSeriesFromCombinedView,
+  updateSeriesOpacity,
+  toggleSeriesVisibility,
+  navigateCombinedSeriesInstance,
+  viewports,
+  // OHIF viewer functions
+  generateOHIFViewerUrl,
+  generateOHIFStudyUrl,
+  openInOHIFViewer,
+  openStudyInOHIFViewer,
+  copyOHIFViewerUrl,
+  copyOHIFStudyUrl,
+  generateMultiSeriesOHIFUrl
 }) => {
   const [activePanel, setActivePanel] = useState<PanelType>('study')
   const [editingMeasurement, setEditingMeasurement] = useState<string | null>(null)
@@ -110,6 +147,7 @@ const EnhancedSidebar: React.FC<EnhancedSidebarProps> = ({
     { id: 'measurements', name: 'Measurements', icon: Ruler, color: 'text-purple-600' },
     { id: 'annotations', name: 'Annotations', icon: MessageSquare, color: 'text-orange-600' },
     { id: 'tools', name: 'Tools', icon: Settings, color: 'text-gray-600' },
+    { id: 'reports', name: 'Reports', icon: FileSpreadsheet, color: 'text-red-600' },
   ]
 
   const renderStudyPanel = () => (
@@ -413,6 +451,59 @@ const EnhancedSidebar: React.FC<EnhancedSidebarProps> = ({
     </div>
   )
 
+  const renderReportsPanel = () => (
+    <div className="space-y-4">
+      <div className="bg-red-50 rounded-lg p-4 border border-red-200">
+        <h4 className="font-medium text-red-900 mb-3 flex items-center">
+          <FileSpreadsheet className="h-4 w-4 mr-2" />
+          Report Generation
+        </h4>
+        <p className="text-sm text-red-700 mb-4">
+          Generate comprehensive reports based on the current study, measurements, and annotations.
+        </p>
+        <button
+          onClick={onGenerateReport}
+          className="w-full p-3 bg-red-600 text-white rounded-lg hover:bg-red-700 flex items-center justify-center"
+        >
+          <FileSpreadsheet className="h-4 w-4 mr-2" />
+          Generate Report
+        </button>
+      </div>
+
+      <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
+        <h4 className="font-medium text-blue-900 mb-3">Report Templates</h4>
+        <div className="space-y-2 text-sm">
+          <div className="flex justify-between">
+            <span className="text-blue-700">Available Templates:</span>
+            <span className="font-medium">5</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-blue-700">Current Modality:</span>
+            <span className="font-medium">{series[0]?.MainDicomTags?.Modality || 'Unknown'}</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="bg-green-50 rounded-lg p-4 border border-green-200">
+        <h4 className="font-medium text-green-900 mb-3">Report Data</h4>
+        <div className="space-y-2 text-sm">
+          <div className="flex justify-between">
+            <span className="text-green-700">Measurements:</span>
+            <span className="font-medium">{measurements.length}</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-green-700">Annotations:</span>
+            <span className="font-medium">{annotations.length}</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-green-700">Series:</span>
+            <span className="font-medium">{series.length}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+
   const renderPanelContent = () => {
     switch (activePanel) {
       case 'study':
@@ -425,6 +516,8 @@ const EnhancedSidebar: React.FC<EnhancedSidebarProps> = ({
         return renderAnnotationsPanel()
       case 'tools':
         return renderToolsPanel()
+      case 'reports':
+        return renderReportsPanel()
       default:
         return renderStudyPanel()
     }
