@@ -10,6 +10,7 @@ import SeriesSelector from './SeriesSelector'
 import ReportGenerator from './ReportGenerator'
 import { useImageManipulation } from '../hooks/useImageManipulation'
 import { Instance, StudyInfo, CurrentImage, Series } from '../types/dicom'
+import { FileSpreadsheet, Download, RotateCcw } from 'lucide-react'
 
 interface DicomViewerProps {
   studyId?: string
@@ -1557,6 +1558,111 @@ const DicomViewer: React.FC<DicomViewerProps> = ({ studyId }) => {
                       if (changes.panY !== undefined) updateViewport(viewportId, { panY: changes.panY })
                     }}
                   />
+                </div>
+              </div>
+
+              {/* Right Sidebar - Reports and Tools */}
+              <div className="w-80 bg-gray-50 border-l border-gray-200 flex flex-col h-full overflow-y-auto">
+                {/* Reports Panel */}
+                <div className="p-4 border-b border-gray-200 bg-white">
+                  <h3 className="text-sm font-semibold text-gray-700 mb-3 flex items-center">
+                    <FileSpreadsheet className="h-4 w-4 mr-2 text-red-600" />
+                    Report Generation
+                  </h3>
+                  <div className="space-y-3">
+                    <div className="bg-red-50 rounded-lg p-3 border border-red-200">
+                      <p className="text-sm text-red-700 mb-3">
+                        Generate comprehensive reports based on the current study, measurements, and annotations.
+                      </p>
+                      <button
+                        onClick={handleGenerateReport}
+                        className="w-full p-3 bg-red-600 text-white rounded-lg hover:bg-red-700 flex items-center justify-center text-sm font-medium"
+                      >
+                        <FileSpreadsheet className="h-4 w-4 mr-2" />
+                        Generate Report
+                      </button>
+                    </div>
+                    
+                    <div className="bg-blue-50 rounded-lg p-3 border border-blue-200">
+                      <h4 className="font-medium text-blue-900 mb-2 text-sm">Report Templates</h4>
+                      <div className="space-y-2 text-xs">
+                        <div className="flex justify-between">
+                          <span className="text-blue-700">Available:</span>
+                          <span className="font-medium">5 Templates</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-blue-700">Modality:</span>
+                          <span className="font-medium">{series[0]?.MainDicomTags?.Modality || 'Unknown'}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="bg-green-50 rounded-lg p-3 border border-green-200">
+                      <h4 className="font-medium text-green-900 mb-2 text-sm">Study Data</h4>
+                      <div className="space-y-2 text-xs">
+                        <div className="flex justify-between">
+                          <span className="text-green-700">Series:</span>
+                          <span className="font-medium">{series.length}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-green-700">Images:</span>
+                          <span className="font-medium">{instances.length}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-green-700">Measurements:</span>
+                          <span className="font-medium">{imageManipulation.measurements.length}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-green-700">Annotations:</span>
+                          <span className="font-medium">{imageManipulation.annotations.length}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Quick Actions */}
+                <div className="p-4 border-b border-gray-200 bg-white">
+                  <h3 className="text-sm font-semibold text-gray-700 mb-3">Quick Actions</h3>
+                  <div className="space-y-2">
+                    <button
+                      onClick={downloadStudy}
+                      className="w-full p-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 flex items-center justify-center text-sm"
+                    >
+                      <Download className="h-4 w-4 mr-2" />
+                      Download Study
+                    </button>
+                    <button
+                      onClick={resetView}
+                      className="w-full p-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 flex items-center justify-center text-sm"
+                    >
+                      <RotateCcw className="h-4 w-4 mr-2" />
+                      Reset View
+                    </button>
+                  </div>
+                </div>
+
+                {/* Study Information */}
+                <div className="p-4 bg-white">
+                  <h3 className="text-sm font-semibold text-gray-700 mb-3">Study Info</h3>
+                  <div className="space-y-2 text-xs">
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Patient:</span>
+                      <span className="font-medium">{studyInfo?.MainDicomTags?.PatientName || 'Unknown'}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">ID:</span>
+                      <span className="font-medium">{studyInfo?.MainDicomTags?.PatientID || 'Unknown'}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Date:</span>
+                      <span className="font-medium">{studyInfo?.MainDicomTags?.StudyDate || 'Unknown'}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Description:</span>
+                      <span className="font-medium">{studyInfo?.MainDicomTags?.StudyDescription || 'Unknown'}</span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

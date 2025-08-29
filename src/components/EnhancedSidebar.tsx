@@ -149,7 +149,6 @@ const EnhancedSidebar: React.FC<EnhancedSidebarProps> = ({
     { id: 'measurements', name: 'Measurements', icon: Ruler, color: 'text-purple-600' },
     { id: 'annotations', name: 'Annotations', icon: MessageSquare, color: 'text-orange-600' },
     { id: 'tools', name: 'Tools', icon: Settings, color: 'text-gray-600' },
-    { id: 'reports', name: 'Reports', icon: FileSpreadsheet, color: 'text-red-600' },
   ]
 
   const renderStudyPanel = () => (
@@ -453,7 +452,7 @@ const EnhancedSidebar: React.FC<EnhancedSidebarProps> = ({
     </div>
   )
 
-  const renderReportsPanel = () => (
+
     <div className="space-y-4">
       <div className="bg-red-50 rounded-lg p-4 border border-red-200">
         <h4 className="font-medium text-red-900 mb-3 flex items-center">
@@ -518,8 +517,7 @@ const EnhancedSidebar: React.FC<EnhancedSidebarProps> = ({
         return renderAnnotationsPanel()
       case 'tools':
         return renderToolsPanel()
-      case 'reports':
-        return renderReportsPanel()
+
       default:
         return renderStudyPanel()
     }
