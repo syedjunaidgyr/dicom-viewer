@@ -114,7 +114,9 @@ const EnhancedSidebar: React.FC<EnhancedSidebarProps> = ({
     console.log('EnhancedSidebar received series:', series)
     console.log('Series length:', series.length)
     console.log('Current series ID:', currentSeriesId)
-  }, [series, currentSeriesId])
+    console.log('Available panels:', panels.map(p => p.name))
+    console.log('Active panel:', activePanel)
+  }, [series, currentSeriesId, activePanel])
 
   const formatFileSize = (bytes: number) => {
     if (bytes === 0) return '0 B'
@@ -531,6 +533,8 @@ const EnhancedSidebar: React.FC<EnhancedSidebarProps> = ({
           {panels.map((panel) => {
             const Icon = panel.icon
             const isActive = activePanel === panel.id
+            
+            console.log(`Rendering panel: ${panel.name} (${panel.id})`)
             
             return (
               <button
