@@ -14,7 +14,7 @@ const ViewerPage: React.FC<ViewerPageProps> = ({ params }) => {
   const { studyId } = React.use(params)
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 w-full">
       {/* Navigation */}
       <Navigation 
         showBackButton={true}
@@ -24,7 +24,7 @@ const ViewerPage: React.FC<ViewerPageProps> = ({ params }) => {
       />
 
       {/* DICOM Viewer */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div className="w-full h-full">
         <DicomViewer studyId={studyId} />
       </div>
     </div>
