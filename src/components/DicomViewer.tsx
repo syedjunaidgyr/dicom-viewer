@@ -1425,7 +1425,7 @@ const DicomViewer: React.FC<DicomViewerProps> = ({ studyId }) => {
             {/* Main Layout with Sidebar */}
             <div className="flex h-full w-full">
               {/* Left Sidebar - Series and Tools */}
-              <div className="w-80 bg-gray-50 border-r border-gray-200 flex flex-col h-full overflow-y-auto">
+              <div className="w-64 bg-gray-50 border-r border-gray-200 flex flex-col h-full overflow-y-auto">
                 {/* Study Header */}
                 <div className="p-4 border-b border-gray-200 bg-white">
                   <StudyHeader
@@ -1507,7 +1507,7 @@ const DicomViewer: React.FC<DicomViewerProps> = ({ studyId }) => {
               </div>
 
               {/* Main Content Area - Multi-Viewport DICOM Viewer */}
-              <div className="flex-1 bg-gray-100 p-6">
+              <div className="flex-1 bg-gray-100 p-4">
                 <div className="h-full">
                   {(() => {
                     console.log('About to render MultiViewport with props:', {
@@ -1562,7 +1562,7 @@ const DicomViewer: React.FC<DicomViewerProps> = ({ studyId }) => {
               </div>
 
               {/* Right Sidebar - Reports and Tools */}
-              <div className="w-80 bg-gray-50 border-l border-gray-200 flex flex-col h-full overflow-y-auto">
+              <div className="w-64 bg-gray-50 border-l border-gray-200 flex flex-col h-full overflow-y-auto">
                 {/* Reports Panel */}
                 <div className="p-4 border-b border-gray-200 bg-white">
                   <h3 className="text-sm font-semibold text-gray-700 mb-3 flex items-center">
