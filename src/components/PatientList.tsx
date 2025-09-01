@@ -34,7 +34,7 @@ export default function PatientList({ onPatientSelect, selectedPatient }: Patien
       setIsLoading(true)
       setError(null)
       
-      const response = await fetch('http://localhost:8080/orthanc/patients')
+      const response = await fetch('http://192.168.1.2:8080/orthanc/patients')
       if (!response.ok) {
         throw new Error('Failed to fetch patients')
       }
@@ -43,7 +43,7 @@ export default function PatientList({ onPatientSelect, selectedPatient }: Patien
       
       // Fetch detailed information for each patient
       const patientPromises = patientIds.map(async (patientId: string) => {
-        const patientResponse = await fetch(`http://localhost:8080/orthanc/patients/${patientId}`)
+        const patientResponse = await fetch(`http://192.168.1.2:8080/orthanc/patients/${patientId}`)
         if (patientResponse.ok) {
           return patientResponse.json()
         }
@@ -107,7 +107,7 @@ export default function PatientList({ onPatientSelect, selectedPatient }: Patien
 
   const downloadPatient = async (patientId: string) => {
     try {
-      const response = await fetch(`http://localhost:8080/orthanc/patients/${patientId}/archive`)
+      const response = await fetch(`http://192.168.1.2:8080/orthanc/patients/${patientId}/archive`)
       if (response.ok) {
         const blob = await response.blob()
         const url = window.URL.createObjectURL(blob)

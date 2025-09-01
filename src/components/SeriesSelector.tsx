@@ -54,7 +54,7 @@ const SeriesSelector: React.FC<SeriesSelectorProps> = ({
       }
       
       // Get the first instance of the series to use as thumbnail
-      const seriesResponse = await fetch(`http://localhost:8080/orthanc/series/${seriesId}`)
+      const seriesResponse = await fetch(`http://192.168.1.2:8080/orthanc/series/${seriesId}`)
       if (seriesResponse.ok) {
         const seriesData = await seriesResponse.json()
         console.log(`Series data for ${seriesId}:`, seriesData)
@@ -72,7 +72,7 @@ const SeriesSelector: React.FC<SeriesSelectorProps> = ({
         if (firstInstanceId) {
           console.log(`Using instance ${firstInstanceId} for preview of series ${seriesId}`)
           // Since there's no thumbnail API, use preview directly
-          const previewUrl = `http://localhost:8080/orthanc/instances/${firstInstanceId}/preview`
+          const previewUrl = `http://192.168.1.2:8080/orthanc/instances/${firstInstanceId}/preview`
           
           // Test if preview loads successfully
           const img = new window.Image()

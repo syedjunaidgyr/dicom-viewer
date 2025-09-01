@@ -223,8 +223,8 @@ const DicomViewer: React.FC<DicomViewerProps> = ({ studyId }) => {
       // Update viewport loading state
       updateViewport(viewportId, { isLoading: true, currentImage: null })
       
-      const fastImageUrl = `http://localhost:8080/orthanc/instances/${instance.ID}/preview?quality=50&size=512`
-      const fallbackImageUrl = `http://localhost:8080/orthanc/instances/${instance.ID}/preview`
+      const fastImageUrl = `http://192.168.1.2:8080/orthanc/instances/${instance.ID}/preview?quality=50&size=512`
+      const fallbackImageUrl = `http://192.168.1.2:8080/orthanc/instances/${instance.ID}/preview`
       
       console.log(`Attempting to load fast image in viewport ${viewportId}: ${fastImageUrl}`)
       
@@ -275,7 +275,7 @@ const DicomViewer: React.FC<DicomViewerProps> = ({ studyId }) => {
     
     try {
       // Fetch instances for this viewport's series
-      const seriesInstancesResponse = await fetch(`http://localhost:8080/orthanc/series/${viewport.currentSeriesId}/instances`)
+      const seriesInstancesResponse = await fetch(`http://192.168.1.2:8080/orthanc/series/${viewport.currentSeriesId}/instances`)
       if (!seriesInstancesResponse.ok) return
       
       const seriesInstanceIds = await seriesInstancesResponse.json()
@@ -290,7 +290,7 @@ const DicomViewer: React.FC<DicomViewerProps> = ({ studyId }) => {
       
       if (newIndex !== viewport.currentInstanceIndex) {
         // Fetch the new instance data
-        const instanceResponse = await fetch(`http://localhost:8080/orthanc/instances/${seriesInstanceIds[newIndex]}`)
+        const instanceResponse = await fetch(`http://192.168.1.2:8080/orthanc/instances/${seriesInstanceIds[newIndex]}`)
         if (instanceResponse.ok) {
           const instance = await instanceResponse.json()
           
@@ -309,13 +309,13 @@ const DicomViewer: React.FC<DicomViewerProps> = ({ studyId }) => {
     
     try {
       // Fetch instances for this viewport's series
-      const seriesInstancesResponse = await fetch(`http://localhost:8080/orthanc/series/${viewport.currentSeriesId}/instances`)
+      const seriesInstancesResponse = await fetch(`http://192.168.1.2:8080/orthanc/series/${viewport.currentSeriesId}/instances`)
       if (!seriesInstancesResponse.ok) return
       
       const seriesInstanceIds = await seriesInstancesResponse.json()
       if (instanceIndex >= 0 && instanceIndex < seriesInstanceIds.length) {
         // Fetch the instance data
-        const instanceResponse = await fetch(`http://localhost:8080/orthanc/instances/${seriesInstanceIds[instanceIndex]}`)
+        const instanceResponse = await fetch(`http://192.168.1.2:8080/orthanc/instances/${seriesInstanceIds[instanceIndex]}`)
         if (instanceResponse.ok) {
           const instance = await instanceResponse.json()
           
@@ -429,7 +429,7 @@ const DicomViewer: React.FC<DicomViewerProps> = ({ studyId }) => {
     
     try {
       // Fetch instances for this series
-      const seriesInstancesResponse = await fetch(`http://localhost:8080/orthanc/series/${seriesId}/instances`)
+      const seriesInstancesResponse = await fetch(`http://192.168.1.2:8080/orthanc/series/${seriesId}/instances`)
       if (!seriesInstancesResponse.ok) return
       
       const seriesInstanceIds = await seriesInstancesResponse.json()
@@ -450,7 +450,7 @@ const DicomViewer: React.FC<DicomViewerProps> = ({ studyId }) => {
         updateViewport(viewportId, { combinedSeries: updatedSeries })
         
         // Load the new instance
-        const instanceResponse = await fetch(`http://localhost:8080/orthanc/instances/${seriesInstanceIds[newIndex]}`)
+        const instanceResponse = await fetch(`http://192.168.1.2:8080/orthanc/instances/${seriesInstanceIds[newIndex]}`)
         if (instanceResponse.ok) {
           const instance = await instanceResponse.json()
           await loadImageInViewport(viewportId, instance)
@@ -538,7 +538,7 @@ const DicomViewer: React.FC<DicomViewerProps> = ({ studyId }) => {
       console.log(`Loading series ${seriesId} in viewport ${viewportId}`)
       
       // Fetch instances for this specific series
-      const seriesInstancesResponse = await fetch(`http://localhost:8080/orthanc/series/${seriesId}/instances`)
+      const seriesInstancesResponse = await fetch(`http://192.168.1.2:8080/orthanc/series/${seriesId}/instances`)
       if (!seriesInstancesResponse.ok) {
         throw new Error(`Failed to fetch instances for series ${seriesId}`)
       }
@@ -548,7 +548,7 @@ const DicomViewer: React.FC<DicomViewerProps> = ({ studyId }) => {
       
       if (seriesInstanceIds.length > 0) {
         // Fetch the first instance data
-        const firstInstanceResponse = await fetch(`http://localhost:8080/orthanc/instances/${seriesInstanceIds[0]}`)
+        const firstInstanceResponse = await fetch(`http://192.168.1.2:8080/orthanc/instances/${seriesInstanceIds[0]}`)
         if (firstInstanceResponse.ok) {
           const firstInstance = await firstInstanceResponse.json()
           
@@ -601,7 +601,7 @@ const DicomViewer: React.FC<DicomViewerProps> = ({ studyId }) => {
         setError(null)
 
         // Load study information
-        const studyResponse = await fetch(`http://localhost:8080/orthanc/studies/${studyId}`)
+        const studyResponse = await fetch(`http://192.168.1.2:8080/orthanc/studies/${studyId}`)
         if (!studyResponse.ok) {
           throw new Error('Failed to fetch study information')
         }
@@ -609,7 +609,7 @@ const DicomViewer: React.FC<DicomViewerProps> = ({ studyId }) => {
         setStudyInfo(studyData)
 
         // Load study instances first to get series information
-        const instancesResponse = await fetch(`http://localhost:8080/orthanc/studies/${studyId}/instances`)
+        const instancesResponse = await fetch(`http://192.168.1.2:8080/orthanc/studies/${studyId}/instances`)
         if (!instancesResponse.ok) {
           throw new Error('Failed to fetch study instances')
         }
@@ -628,7 +628,7 @@ const DicomViewer: React.FC<DicomViewerProps> = ({ studyId }) => {
           console.log('Instances are IDs, fetching full data')
           const instancePromises = instanceData.map(async (instanceId: string) => {
             try {
-              const instanceResponse = await fetch(`http://localhost:8080/orthanc/instances/${instanceId}`)
+              const instanceResponse = await fetch(`http://192.168.1.2:8080/orthanc/instances/${instanceId}`)
               if (instanceResponse.ok) {
                 return await instanceResponse.json()
               } else {
@@ -668,7 +668,7 @@ const DicomViewer: React.FC<DicomViewerProps> = ({ studyId }) => {
         const seriesPromises = seriesIds.map(async (seriesId: string) => {
           try {
             console.log(`Fetching series details for: ${seriesId}`)
-            const seriesResponse = await fetch(`http://localhost:8080/orthanc/series/${seriesId}`)
+            const seriesResponse = await fetch(`http://192.168.1.2:8080/orthanc/series/${seriesId}`)
             if (seriesResponse.ok) {
               const seriesData = await seriesResponse.json()
               console.log(`Series ${seriesId} data:`, seriesData)
@@ -768,7 +768,7 @@ const DicomViewer: React.FC<DicomViewerProps> = ({ studyId }) => {
         const instancePromises = instanceIds.map(async (instanceId: string) => {
           try {
             console.log(`Fetching instance: ${instanceId}`)
-            const instanceResponse = await fetch(`http://localhost:8080/orthanc/instances/${instanceId}`)
+            const instanceResponse = await fetch(`http://192.168.1.2:8080/orthanc/instances/${instanceId}`)
             if (instanceResponse.ok) {
               const instanceData = await instanceResponse.json()
               console.log(`Instance ${instanceId} loaded:`, instanceData)
@@ -827,8 +827,8 @@ const DicomViewer: React.FC<DicomViewerProps> = ({ studyId }) => {
       setIsLoading(true)
       
       // Try to use a smaller, faster image format first
-      const fastImageUrl = `http://localhost:8080/orthanc/instances/${instance.ID}/preview?quality=50&size=512`
-      const fallbackImageUrl = `http://localhost:8080/orthanc/instances/${instance.ID}/preview`
+      const fastImageUrl = `http://192.168.1.2:8080/orthanc/instances/${instance.ID}/preview?quality=50&size=512`
+      const fallbackImageUrl = `http://192.168.1.2:8080/orthanc/instances/${instance.ID}/preview`
       
       console.log(`Attempting to load fast image from: ${fastImageUrl}`)
       
@@ -854,7 +854,7 @@ const DicomViewer: React.FC<DicomViewerProps> = ({ studyId }) => {
             const nextIndex = currentIndex + i
             if (nextIndex < instances.length) {
               const nextInstance = instances[nextIndex]
-              const nextImageUrl = `http://localhost:8080/orthanc/instances/${nextInstance.ID}/preview?quality=50&size=512`
+              const nextImageUrl = `http://192.168.1.2:8080/orthanc/instances/${nextInstance.ID}/preview?quality=50&size=512`
               console.log(`Preloading next instance: ${nextInstance.ID}`)
               
               // Create a hidden image element to preload
@@ -968,7 +968,7 @@ const DicomViewer: React.FC<DicomViewerProps> = ({ studyId }) => {
       series.forEach(async (s) => {
         if (s.ID !== seriesId && s.Instances && s.Instances.length > 0) {
           const firstInstanceId = s.Instances[0]
-          const thumbnailUrl = `http://localhost:8080/orthanc/instances/${firstInstanceId}/preview?quality=30&size=256`
+          const thumbnailUrl = `http://192.168.1.2:8080/orthanc/instances/${firstInstanceId}/preview?quality=30&size=256`
           console.log(`Preloading thumbnail for series: ${s.ID}`)
           
           // Create a hidden image element to preload
@@ -1011,7 +1011,7 @@ const DicomViewer: React.FC<DicomViewerProps> = ({ studyId }) => {
     if (!studyId) return
     
     try {
-      const response = await fetch(`http://localhost:8080/orthanc/studies/${studyId}/archive`)
+      const response = await fetch(`http://192.168.1.2:8080/orthanc/studies/${studyId}/archive`)
       if (response.ok) {
         const blob = await response.blob()
         const url = window.URL.createObjectURL(blob)
@@ -1030,11 +1030,11 @@ const DicomViewer: React.FC<DicomViewerProps> = ({ studyId }) => {
 
   // Generate OHIF web viewer URLs
   const generateOHIFViewerUrl = (seriesId: string) => {
-    return `http://localhost:8042/web-viewer/app/viewer.html?series=${seriesId}`
+    return `http://192.168.1.2:8042/web-viewer/app/viewer.html?series=${seriesId}`
   }
 
   const generateOHIFStudyUrl = (studyId: string) => {
-    return `http://localhost:8042/web-viewer/app/viewer.html?study=${studyId}`
+    return `http://192.168.1.2:8042/web-viewer/app/viewer.html?study=${studyId}`
   }
 
   const openInOHIFViewer = (seriesId: string) => {
@@ -1088,7 +1088,7 @@ const DicomViewer: React.FC<DicomViewerProps> = ({ studyId }) => {
     if (seriesIds.length === 1) return generateOHIFViewerUrl(seriesIds[0])
     
     // For multiple series, use the study parameter
-    return `http://localhost:8042/web-viewer/app/viewer.html?study=${studyId}`
+    return `http://192.168.1.2:8042/web-viewer/app/viewer.html?study=${studyId}`
   }
 
   const changeInstance = async (direction: 'next' | 'previous') => {

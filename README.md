@@ -15,8 +15,8 @@ A modern, web-based DICOM viewer built with Next.js, Tailwind CSS, and Cornersto
 ## Prerequisites
 
 - Node.js 18+ and npm
-- Orthanc PACS server running on `localhost:8042`
-- CORS proxy server running on `localhost:8080` (for development)
+- Orthanc PACS server running on `192.168.1.2:8042`
+- CORS proxy server running on `192.168.1.2:8080` (for development)
 
 ## Installation
 
@@ -32,7 +32,7 @@ A modern, web-based DICOM viewer built with Next.js, Tailwind CSS, and Cornersto
    ```
 
 3. **Configure Orthanc server**
-   - Ensure Orthanc is running on `localhost:8042`
+   - Ensure Orthanc is running on `192.168.1.2:8042`
    - Configure CORS settings in Orthanc configuration
    - Set up authentication if required
 
@@ -42,7 +42,7 @@ A modern, web-based DICOM viewer built with Next.js, Tailwind CSS, and Cornersto
    ```
 
 5. **Open your browser**
-   Navigate to `http://localhost:3000`
+   Navigate to `http://192.168.1.2:3000`
 
 ## Configuration
 
@@ -50,18 +50,18 @@ A modern, web-based DICOM viewer built with Next.js, Tailwind CSS, and Cornersto
 
 The application is configured to work with the following endpoints:
 
-- **Orthanc Base**: `http://localhost:8080/orthanc` (via CORS proxy)
-- **Orthanc Direct**: `http://localhost:8042` (admin operations)
-- **CORS Proxy**: `http://localhost:8080`
+- **Orthanc Base**: `http://192.168.1.2:8080/orthanc` (via CORS proxy)
+- **Orthanc Direct**: `http://192.168.1.2:8042` (admin operations)
+- **CORS Proxy**: `http://192.168.1.2:8080`
 
 ### Environment Variables
 
 Create a `.env.local` file in the root directory:
 
 ```env
-NEXT_PUBLIC_ORTHANC_BASE_URL=http://localhost:8080/orthanc
-NEXT_PUBLIC_ORTHANC_DIRECT_URL=http://localhost:8042
-NEXT_PUBLIC_CORS_PROXY_URL=http://localhost:8080
+NEXT_PUBLIC_ORTHANC_BASE_URL=http://192.168.1.2:8080/orthanc
+NEXT_PUBLIC_ORTHANC_DIRECT_URL=http://192.168.1.2:8042
+NEXT_PUBLIC_CORS_PROXY_URL=http://192.168.1.2:8080
 ```
 
 ## Usage

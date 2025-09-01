@@ -37,9 +37,9 @@ export default function StudyList({ onStudySelect, selectedStudy, patientId }: S
       setIsLoading(true)
       setError(null)
       
-      let url = 'http://localhost:8080/orthanc/studies'
+      let url = 'http://192.168.1.2:8080/orthanc/studies'
       if (patientId) {
-        url = `http://localhost:8080/orthanc/patients/${patientId}/studies`
+        url = `http://192.168.1.2:8080/orthanc/patients/${patientId}/studies`
       }
       
       const response = await fetch(url)
@@ -51,7 +51,7 @@ export default function StudyList({ onStudySelect, selectedStudy, patientId }: S
       
       // Fetch detailed information for each study
       const studyPromises = studyIds.map(async (studyId: string) => {
-        const studyResponse = await fetch(`http://localhost:8080/orthanc/studies/${studyId}`)
+        const studyResponse = await fetch(`http://192.168.1.2:8080/orthanc/studies/${studyId}`)
         if (studyResponse.ok) {
           return studyResponse.json()
         }
@@ -97,7 +97,7 @@ export default function StudyList({ onStudySelect, selectedStudy, patientId }: S
 
   const downloadStudy = async (studyId: string) => {
     try {
-      const response = await fetch(`http://localhost:8080/orthanc/studies/${studyId}/archive`)
+      const response = await fetch(`http://192.168.1.2:8080/orthanc/studies/${studyId}/archive`)
       if (response.ok) {
         const blob = await response.blob()
         const url = window.URL.createObjectURL(blob)

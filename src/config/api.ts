@@ -1,10 +1,10 @@
 export const API_CONFIG = {
   // Base URLs
-  ORTHANC_BASE: 'http://localhost:8080/orthanc',
-  ORTHANC_DIRECT: 'http://localhost:8042',
+  ORTHANC_BASE: 'http://192.168.1.2:8080/orthanc',
+  ORTHANC_DIRECT: 'http://192.168.1.2:8042',
   
   // CORS proxy for development
-  CORS_PROXY: 'http://localhost:8080',
+  CORS_PROXY: 'http://192.168.1.2:8080',
   
   // API endpoints
   ENDPOINTS: {

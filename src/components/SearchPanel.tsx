@@ -53,7 +53,7 @@ export default function SearchPanel() {
         Expand: true
       }
 
-      const response = await fetch('http://localhost:8080/orthanc/tools/find', {
+      const response = await fetch('http://192.168.1.2:8080/orthanc/tools/find', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -94,11 +94,11 @@ export default function SearchPanel() {
     try {
       let url = ''
       if (searchLevel === 'Study') {
-        url = `http://localhost:8080/orthanc/studies/${resultId}/archive`
+        url = `http://192.168.1.2:8080/orthanc/studies/${resultId}/archive`
       } else if (searchLevel === 'Series') {
-        url = `http://localhost:8080/orthanc/series/${resultId}/archive`
+        url = `http://192.168.1.2:8080/orthanc/series/${resultId}/archive`
       } else {
-        url = `http://localhost:8080/orthanc/instances/${resultId}/file`
+        url = `http://192.168.1.2:8080/orthanc/instances/${resultId}/file`
       }
 
       const response = await fetch(url)

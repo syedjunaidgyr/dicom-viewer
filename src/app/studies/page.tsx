@@ -36,7 +36,7 @@ const StudiesPage: React.FC = () => {
       setError(null)
 
       // First, get the list of study IDs
-      const response = await fetch('http://localhost:8080/orthanc/studies')
+      const response = await fetch('http://192.168.1.2:8080/orthanc/studies')
       if (!response.ok) {
         throw new Error('Failed to fetch studies')
       }
@@ -58,7 +58,7 @@ const StudiesPage: React.FC = () => {
       setIsLoadingDetails(true)
       const studyPromises = validStudyIds.map(async (studyId: string) => {
         try {
-          const studyResponse = await fetch(`http://localhost:8080/orthanc/studies/${studyId}`)
+          const studyResponse = await fetch(`http://192.168.1.2:8080/orthanc/studies/${studyId}`)
           if (studyResponse.ok) {
             const studyData = await studyResponse.json()
             return studyData
