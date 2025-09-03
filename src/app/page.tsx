@@ -1,13 +1,20 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { FileText, Activity, Users, Database } from 'lucide-react'
 
 const HomePage: React.FC = () => {
   const router = useRouter()
 
-  // Removed auto-redirect to let users choose their destination
+  useEffect(() => {
+    // Redirect to studies page after a brief delay
+    const timer = setTimeout(() => {
+      router.push('/studies')
+    }, 2000)
+
+    return () => clearTimeout(timer)
+  }, [router])
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
@@ -46,22 +53,14 @@ const HomePage: React.FC = () => {
 
         <div className="bg-white rounded-lg p-6 shadow-lg max-w-md mx-auto">
           <p className="text-gray-600 mb-4">
-            Choose your destination:
+            Redirecting to studies list...
           </p>
-          <div className="space-y-3">
-            <button
-              onClick={() => router.push('/studies')}
-              className="w-full bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
-            >
-              Go to Studies
-            </button>
-            <button
-              onClick={() => router.push('/demo')}
-              className="w-full bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors"
-            >
-              Try Button Evaluator Demo
-            </button>
-          </div>
+          <button
+            onClick={() => router.push('/studies')}
+            className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            Go to Studies
+          </button>
         </div>
       </div>
     </div>
