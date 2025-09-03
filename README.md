@@ -1,156 +1,142 @@
-# DICOM Viewer - PACS System
+# DICOM Viewer with Enhanced Study List
 
-A modern, web-based DICOM viewer built with Next.js, Tailwind CSS, and CornerstoneJS. This application provides a comprehensive interface for viewing, searching, and managing DICOM medical images through the Orthanc PACS server.
+A professional medical imaging viewer built with Next.js, featuring an enhanced study list interface similar to OHIF, button evaluator for intelligent button state management, and Cornerstone.js integration for advanced DICOM viewing capabilities.
 
 ## Features
 
-- 🖼️ **Advanced DICOM Viewer**: High-performance image rendering with CornerstoneJS
-- 🔍 **Smart Search**: Advanced search capabilities across studies, series, and instances
-- 📊 **Study Management**: Browse and organize DICOM studies by patient
-- 🛠️ **Image Tools**: Pan, zoom, window/level adjustment, and rotation
-- 📱 **Responsive Design**: Modern UI built with Tailwind CSS
-- 🔄 **Real-time Updates**: Live data from Orthanc PACS server
-- 📥 **Download Support**: Export studies and series as ZIP archives
+### 🏥 Enhanced Study List
+- **Dark Theme Interface**: Professional medical imaging interface with dark theme
+- **Advanced Filtering**: Filter studies by patient name, MRN, study date, description, modality, and accession number
+- **Selected Study Details**: Detailed view of selected study with comprehensive information
+- **Series Information**: Display series details with modality and instance counts
+- **Copy Functionality**: Copy instance counts and other data to clipboard
 
-## Prerequisites
+### 🎯 Button Evaluator
+- **Intelligent Button States**: Automatically enables/disables buttons based on study characteristics
+- **Modality-Based Logic**: Different tools available based on imaging modality (CT, MR, US, etc.)
+- **Study Content Analysis**: Analyzes study descriptions and content to determine available tools
+- **Dynamic Tool Availability**: Buttons are enabled/disabled in real-time as studies are selected
 
-- Node.js 18+ and npm
-- Orthanc PACS server running on `localhost:8042`
-- CORS proxy server running on `localhost:8080` (for development)
+### 🔬 Multiple Viewer Modes
+- **Basic Viewer**: Standard DICOM viewing with pan, zoom, and window/level controls
+- **Segmentation**: Advanced tools for CT and MR studies with measurement capabilities
+- **Annotations**: Specialized tools for ultrasound studies and annotations
+- **Metabolic Analysis**: Tools for PET/CT studies and tumor volume analysis
+- **Microscopy**: High-resolution image tools for histological studies
+- **Preclinical 4D**: Research tools for preclinical studies and time-series data
+
+### 🖼️ Cornerstone.js Integration
+- **Professional DICOM Rendering**: High-quality medical image display
+- **Advanced Tools**: Measurement, annotation, and analysis tools
+- **Multi-Series Support**: Navigate between different series within a study
+- **Responsive Design**: Optimized for various screen sizes and devices
 
 ## Installation
 
-1. **Clone the repository**
-   ```bash
-   git clone <repository-url>
-   cd dicom-viewer
-   ```
-
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
-
-3. **Configure Orthanc server**
-   - Ensure Orthanc is running on `localhost:8042`
-   - Configure CORS settings in Orthanc configuration
-   - Set up authentication if required
-
-4. **Start the development server**
-   ```bash
-   npm run dev
-   ```
-
-5. **Open your browser**
-   Navigate to `http://localhost:3000`
-
-## Configuration
-
-### API Endpoints
-
-The application is configured to work with the following endpoints:
-
-- **Orthanc Base**: `http://localhost:8080/orthanc` (via CORS proxy)
-- **Orthanc Direct**: `http://localhost:8042` (admin operations)
-- **CORS Proxy**: `http://localhost:8080`
-
-### Environment Variables
-
-Create a `.env.local` file in the root directory:
-
-```env
-NEXT_PUBLIC_ORTHANC_BASE_URL=http://localhost:8080/orthanc
-NEXT_PUBLIC_ORTHANC_DIRECT_URL=http://localhost:8042
-NEXT_PUBLIC_CORS_PROXY_URL=http://localhost:8080
+1. Clone the repository:
+```bash
+git clone <repository-url>
+cd dicom-viewer
 ```
+
+2. Install dependencies:
+```bash
+npm install
+```
+
+3. Start the development server:
+```bash
+npm run dev
+```
+
+4. Open [http://localhost:3000](http://localhost:3000) in your browser
+
+## Prerequisites
+
+### Orthanc PACS Server
+This application requires a running Orthanc PACS server. Make sure you have:
+
+- Orthanc server running on `http://localhost:8080`
+- DICOM studies loaded into Orthanc
+- CORS properly configured for local development
+
+### Cornerstone.js Dependencies
+The following Cornerstone.js packages are included:
+- `@cornerstonejs/core`: Core rendering engine
+- `@cornerstonejs/tools`: Measurement and annotation tools
+- `@cornerstonejs/dicom-image-loader`: DICOM image loading and decoding
 
 ## Usage
 
-### Main Interface
+### 1. Study List Interface
+- Navigate to `/studies` to view the enhanced study list
+- Use the filter controls at the top to search for specific studies
+- Click on any study row to select it and view details
 
-The application is organized into four main tabs:
+### 2. Button Evaluator
+The button evaluator automatically determines which tools are available:
+- **Basic Viewer**: Always available for all studies
+- **Segmentation**: Available for CT and MR studies
+- **Annotations**: Available for ultrasound studies
+- **Metabolic Analysis**: Available for PET/CT and tumor studies
+- **Microscopy**: Available for high-resolution and histological studies
+- **Preclinical 4D**: Available for research studies with multiple time points
 
-1. **Studies**: Browse all DICOM studies with filtering and search
-2. **Patients**: View studies organized by patient
-3. **Search**: Advanced DICOM search with multiple criteria
-4. **Viewer**: Dedicated image viewing interface
+### 3. Viewer Modes
+Click on any enabled button to open the appropriate viewer mode:
+- Each mode provides specialized tools and interface elements
+- Navigate between series using the series navigation panel
+- Use the back button to return to the study list
 
-### DICOM Viewer Tools
+## Architecture
 
-- **Pan Tool**: Move around the image (left mouse button)
-- **Zoom Tool**: Zoom in/out (right mouse button)
-- **Window/Level**: Adjust image contrast and brightness
-- **Rotate**: Rotate the image
-- **Reset View**: Return to default view
+### Components
+- **`EnhancedStudyList`**: Main study list interface with filtering and selection
+- **`ButtonEvaluator`**: Invisible component that manages button states
+- **`CornerstoneViewer`**: DICOM viewer with Cornerstone.js integration
+- **`Navigation`**: Consistent navigation across the application
 
-### Search Capabilities
+### State Management
+- Study selection and viewer mode state
+- Button availability states based on study characteristics
+- Series and instance data for the selected study
 
-Search across multiple DICOM attributes:
-- Patient Name and ID
-- Study Description and Date
-- Modality (CT, MR, XR, etc.)
-- Series Description
-- SOP Class UID
+### API Integration
+- RESTful API calls to Orthanc PACS server
+- Study, series, and instance data fetching
+- DICOM file loading for viewer display
 
-## API Integration
+## Configuration
 
-The application integrates with the Orthanc REST API using the endpoints defined in your Postman collection:
+### Orthanc Server
+Update the Orthanc server URL in the components if needed:
+```typescript
+const ORTHANC_BASE_URL = 'http://localhost:8080/orthanc'
+```
 
-- `GET /studies` - Retrieve all studies
-- `GET /studies/{id}` - Get study details
-- `GET /studies/{id}/instances` - Get study instances
-- `POST /tools/find` - Advanced search
-- `GET /patients` - Get all patients
-- `GET /instances/{id}/file` - Download DICOM files
+### Button Evaluation Rules
+Modify the button evaluation logic in `ButtonEvaluator.tsx`:
+```typescript
+// Example: Add new modality support
+if (modalities.includes('XR')) {
+  buttonStates.xray = true
+}
+```
 
 ## Development
 
-### Project Structure
+### Adding New Viewer Modes
+1. Add the new mode to the type definition
+2. Update the button evaluator logic
+3. Implement the viewer component
+4. Add the mode to the studies page
 
-```
-src/
-├── app/                 # Next.js app directory
-│   ├── layout.tsx      # Root layout
-│   └── page.tsx        # Main page
-├── components/          # React components
-│   ├── DicomViewer.tsx # Main DICOM viewer
-│   ├── StudyList.tsx   # Studies list component
-│   ├── PatientList.tsx # Patients list component
-│   └── SearchPanel.tsx # Search interface
-└── config/             # Configuration files
-    └── api.ts          # API configuration
-```
-
-### Key Technologies
-
-- **Next.js 14**: React framework with App Router
-- **TypeScript**: Type-safe development
-- **Tailwind CSS**: Utility-first CSS framework
-- **CornerstoneJS**: Medical imaging library
-- **Lucide React**: Icon library
-
-### Building for Production
-
-```bash
-npm run build
-npm start
-```
-
-## Troubleshooting
-
-### Common Issues
-
-1. **CORS Errors**: Ensure your CORS proxy is running and configured correctly
-2. **Image Loading Failures**: Check Orthanc server connectivity and DICOM file accessibility
-3. **Tool Activation Issues**: Verify CornerstoneJS initialization and tool registration
-
-### Debug Mode
-
-Enable debug logging by setting the environment variable:
-
-```env
-NEXT_PUBLIC_DEBUG=true
-```
+### Customizing Button States
+Modify the `ButtonEvaluator` component to add new evaluation rules based on:
+- Study modality
+- Study description keywords
+- Instance count thresholds
+- Series characteristics
 
 ## Contributing
 
@@ -167,13 +153,15 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 ## Support
 
 For support and questions:
-- Check the Orthanc documentation: https://orthanc-server.com/
-- Review CornerstoneJS documentation: https://cornerstonejs.org/
-- Open an issue in the repository
+- Check the documentation
+- Review the code examples
+- Open an issue on GitHub
 
-## Acknowledgments
+## Roadmap
 
-- [Orthanc](https://orthanc-server.com/) - Open-source PACS server
-- [CornerstoneJS](https://cornerstonejs.org/) - Medical imaging library
-- [Next.js](https://nextjs.org/) - React framework
-- [Tailwind CSS](https://tailwindcss.com/) - CSS framework
+- [ ] Multi-viewport support
+- [ ] Advanced measurement tools
+- [ ] Report generation
+- [ ] Export functionality
+- [ ] User authentication
+- [ ] Study comparison tools
